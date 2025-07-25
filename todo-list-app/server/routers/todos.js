@@ -1,6 +1,9 @@
 const express = require('express');
+const auth = require('../middleware/auth');
 const { createTodo, getAllTodos, getTodo, updateTodo, deleteTodo, markTodoComplete, markTodoIncomplete } = require('../controllers/todos');
 const router = express.Router();
+
+router.use(auth.authenticate());
 
 router.post("/", createTodo);
 router.get("/", getAllTodos);

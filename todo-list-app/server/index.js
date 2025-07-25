@@ -1,11 +1,17 @@
 require("dotenv").config();
 const express = require('express');
+const cors = require("cors");
 const usersRouter = require('./routers/users');
 const todosRouter = require('./routers/todos');
+const auth = require('./middleware/auth');
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(auth.initialize());
+
 app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/todos', todosRouter);
 
