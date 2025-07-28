@@ -15,7 +15,23 @@ const createTodo = async(req, res, next) => {
 
 const getAllTodos = async(req, res, next) => {
     try {
-        res.status(200).json({ data: await todoService.getAllTodos() });
+        const limit = req.query.size || 10;
+        const offset = ((req.query.page || 1) - 1) * limit;
+        const currentPage = req.query.page;
+        const size = req.query.size;
+        const todosCount = await todoService.getTodosCount();
+        const totalPages = todosCount / size;
+        const title = req.query.title || '';
+        const description = req.query.description || '';
+        const todos = await todoService.getAllTodos(offset, limit, title, description);
+        const response = {
+            items: todos,
+            page: currentPage,
+            size: size,
+            totalPages: totalPages,
+            total: todosCount 
+        }
+        res.status(200).json(response);
     }
     catch(error) {
         next(error);

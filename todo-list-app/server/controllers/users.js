@@ -11,7 +11,7 @@ const signUp = async(req, res, next) => {
         const user = await findUser(email);
 
         if(user) {
-            throw new Error("Email already exists!");
+            res.status(409).json({ message: "Email already exists!" });
         }
 
         const { token } = await createUser(email, firstName, lastName, password);
@@ -19,7 +19,7 @@ const signUp = async(req, res, next) => {
         res.status(201).json({ message: "User is created" });
     }
     catch(error) {
-        res.status(409);
+        next(error);
     }
 };
 
@@ -32,7 +32,7 @@ const signIn = async(req, res, next) => {
         const user = await findUser(email);
 
         if(!user) {
-            throw new Error("Email doesn't exists!");
+            res.status(409).json({ message: "Email doesn't exists!" });
         }
 
         const { token } = await authenticate(email, password);
@@ -41,7 +41,6 @@ const signIn = async(req, res, next) => {
     }
     catch(error) {
         next(error);
-        res.status(422);
     }
 };
 
