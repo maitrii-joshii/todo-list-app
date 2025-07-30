@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import Stack from "@mui/material/Stack";
 import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
+import { Link } from 'react-router';
 
 
 const Home = () => {
@@ -16,8 +17,8 @@ const Home = () => {
                         Donezo
                     </Typography>
                     <Stack justifyContent="space-evenly" direction="row" divider={<Divider orientation="vertical" flexItem />}spacing={2}>
-                        <Button variant="outlined">Login</Button>
-                        <Button variant="contained">Sign Up</Button>
+                        <Button variant="outlined" component={Link} to={'/login'}>Login</Button>
+                        <Button variant="contained" component={Link} to={'/signup'}>Sign Up</Button>
                     </Stack>
                 </Stack>
             </Box>
