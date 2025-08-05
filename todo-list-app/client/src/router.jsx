@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import TodoForm from "./pages/TodoForm";
+import Todos from "./pages/Todos";
 
 const router = createBrowserRouter([
     {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
     {
         path: "/todo",
         element: <TodoForm/>,
+    },
+    {
+        path: "/todos",
+        element: <Todos/>,
     }
 ])
 
