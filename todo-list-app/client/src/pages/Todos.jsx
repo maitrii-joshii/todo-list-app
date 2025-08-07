@@ -15,37 +15,158 @@ import InputLabel from "@mui/material/InputLabel";
 import InputAdornment from "@mui/material/InputAdornment";
 import FormControl from "@mui/material/FormControl";
 import IconButton from "@mui/material/IconButton";
+import Pagination from "@mui/material/Pagination";
 
 const todos = [
-    {
+{
         id: 1,
-        title: "My first todo",
-        description: "This is my first todo task",
-        isCompleted: false
+        title: "Setup development environment",
+        description: "Install VSCode, Node.js, and Git",
+        isCompleted: true
     },
     {
         id: 2,
-        title: "My second todo",
-        description: "This is my second todo task",
+        title: "Create project structure",
+        description: "Initialize project with folder structure",
         isCompleted: false
     },
     {
         id: 3,
-        title: "My third todo",
-        description: "This is my third todo task",
-        isCompleted: false
+        title: "Learn JavaScript basics",
+        description: "Cover variables, functions, and loops",
+        isCompleted: true
     },
     {
         id: 4,
-        title: "My fourth todo",
-        description: "This is my fourth todo task",
+        title: "Understand async in JS",
+        description: "Explore promises, async/await",
         isCompleted: false
     },
     {
         id: 5,
-        title: "My first todo",
-        description: "This is my fifth todo task",
+        title: "Practice DOM manipulation",
+        description: "Build a simple counter using HTML/JS",
+        isCompleted: true
+    },
+    {
+        id: 6,
+        title: "Buy groceries",
+        description: "Milk, Bread, Eggs, and Fruits",
+        isCompleted: true
+    },
+    {
+        id: 7,
+        title: "Read a book",
+        description: "Read 20 pages of a novel",
         isCompleted: false
+    },
+    {
+        id: 8,
+        title: "Workout",
+        description: "Complete 30 minutes of cardio",
+        isCompleted: true
+    },
+    {
+        id: 9,
+        title: "Pay bills",
+        description: "Pay electricity and internet bills",
+        isCompleted: false
+    },
+    {
+        id: 10,
+        title: "Call parents",
+        description: "Talk to parents for at least 15 minutes",
+        isCompleted: true
+    },
+    {
+        id: 11,
+        title: "Clean room",
+        description: "Organize wardrobe and clean the floor",
+        isCompleted: false
+    },
+    {
+        id: 12,
+        title: "Learn JavaScript",
+        description: "Practice JavaScript functions and loops",
+        isCompleted: true
+    },
+    {
+        id: 13,
+        title: "Write blog post",
+        description: "Draft a blog post on career transition",
+        isCompleted: false
+    },
+    {
+        id: 14,
+        title: "Check emails",
+        description: "Respond to important emails",
+        isCompleted: true
+    },
+    {
+        id: 15,
+        title: "Attend meeting",
+        description: "Project sync-up at 11 AM",
+        isCompleted: true
+    },
+    {
+        id: 16,
+        title: "Plan weekend trip",
+        description: "Research places and make a list",
+        isCompleted: false
+    },
+    {
+        id: 17,
+        title: "Watch a tutorial",
+        description: "Watch React JS crash course on YouTube",
+        isCompleted: false
+    },
+    {
+        id: 18,
+        title: "Update resume",
+        description: "Add latest project and update skills",
+        isCompleted: true
+    },
+    {
+        id: 19,
+        title: "Backup files",
+        description: "Backup important work files to cloud",
+        isCompleted: false
+    },
+    {
+        id: 20,
+        title: "Refactor code",
+        description: "Improve code structure in the Todo app",
+        isCompleted: false
+    },
+    {
+        id: 21,
+        title: "Walk the dog",
+        description: "Evening walk for 20 minutes",
+        isCompleted: true
+    },
+    {
+        id: 22,
+        title: "Fix bugs",
+        description: "Resolve UI issues in task management module",
+        isCompleted: true
+    },
+    {
+        id: 23,
+        title: "Write unit tests",
+        description: "Add test cases for user services",
+        isCompleted: false
+    },
+    {
+        id: 24,
+        title: "Prepare presentation",
+        description: "Slides for Monday’s team review",
+        isCompleted: false
+    },
+    {
+        id: 25,
+        title: "Reflect on the day",
+        description: "Write down what went well today",
+        isCompleted: true
     }
 ];
 
@@ -85,6 +206,9 @@ const Todos = () => {
                         isCompleted={todo.isCompleted}
                     />)
                 }
+            </Stack>
+            <Stack sx={{ display:"flex", justifyContent:"space-between", alignItems:"center", my:2 }} spacing={2}>
+                <Pagination count={5} variant="outlined" shape="rounded"/>
             </Stack>
         </Container>
     )
