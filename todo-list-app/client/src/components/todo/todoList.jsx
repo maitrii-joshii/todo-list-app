@@ -12,7 +12,7 @@ import IconButton from "@mui/material/IconButton";
 import Pagination from "@mui/material/Pagination";
 import TodoListItem from "./todoListItems";
 
-const TodoList = ({todos}) => {
+const TodoList = ({todos, totalPages, handlePageChange}) => {
     return (
         <>
             <Box sx={{ display:"flex", justifyContent:"space-between", alignItems:"center", my:2 }}>
@@ -50,7 +50,7 @@ const TodoList = ({todos}) => {
                 }
             </Stack>
             <Stack sx={{ display:"flex", justifyContent:"space-between", alignItems:"center", my:2 }} spacing={2}>
-                <Pagination count={5} variant="outlined" shape="rounded"/>
+                <Pagination count={totalPages} variant="outlined" shape="rounded" onChange={handlePageChange}/>
             </Stack>
         </>
     )

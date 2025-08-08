@@ -5,20 +5,30 @@ import TodoList from "../components/todo/todoList";
 
 const Todos = () => {
     const [todos, setTodos] = useState([]);
+    const [totalPages, setTotalPages] = useState(0);
     
-    const fetchTodos = async () => {
-        const response = await fetch("http://localhost:3000/api/v1/todos");
+    const fetchTodos = async (page=1) => {
+        const response = await fetch(`http://localhost:3000/api/v1/todos?page=${page}`);
         const result = await response.json();
         return result;
     }
 
-    useEffect(async() => {
-        const result = await fetchTodos();
+    const handlePageChange = (event, page) => {
+        fetchTodos(page).then((result) => {
+            setTodos(result.items);
+        });
+    }
+
+    useEffect(() => {
+        fetchTodos().then((result) => {
+            setTodos(result.items);
+            setTotalPages(result.totalPages);
+        });
     }, [])
 
     return (
         <Container>
-            <TodoList todos={todos}></TodoList>
+            <TodoList todos={todos} totalPages={totalPages} handlePageChange={handlePageChange}></TodoList>
         </Container>
     )
 }
