@@ -17,12 +17,12 @@ const getAllTodos = async(req, res, next) => {
     try {
         const limit = req.query.size || 10;
         const offset = ((req.query.page || 1) - 1) * limit;
-        const currentPage = req.query.page || 1;
-        const size = limit;
-        const todosCount = await todoService.getTodosCount();
-        const totalPages = Math.ceil(todosCount / size);
         const title = req.query.title || '';
         const description = req.query.description || '';
+        const currentPage = req.query.page || 1;
+        const size = limit;
+        const todosCount = await todoService.getTodosCount(title, description);
+        const totalPages = Math.ceil(todosCount / size);
         const todos = await todoService.getAllTodos(offset, limit, title, description);
         const response = {
             items: todos,

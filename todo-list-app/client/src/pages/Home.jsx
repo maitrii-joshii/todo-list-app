@@ -1,12 +1,13 @@
 import React from "react";
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-import Divider from '@mui/material/Divider';
-import Button from '@mui/material/Button';
-import { Link } from 'react-router';
-
+import {
+  Container,
+  Typography,
+  Box,
+  Stack,
+  Divider,
+  Button
+} from "@mui/material";
+import { Link } from "react-router";
 
 const Home = () => {
     return (

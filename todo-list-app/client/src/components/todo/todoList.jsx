@@ -1,18 +1,46 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import Typography from '@mui/material/Typography';
-import Box from "@mui/material/Box";
-import Stack from "@mui/material/Stack";
+import React, { useState, useEffect } from "react";
+import {
+  Typography,
+  Box,
+  Stack,
+  OutlinedInput,
+  InputLabel,
+  InputAdornment,
+  FormControl,
+  IconButton,
+  Pagination
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputLabel from "@mui/material/InputLabel";
-import InputAdornment from "@mui/material/InputAdornment";
-import FormControl from "@mui/material/FormControl";
-import IconButton from "@mui/material/IconButton";
-import Pagination from "@mui/material/Pagination";
 import TodoListItem from "./todoListItems";
 
-const TodoList = ({todos, totalPages, handlePageChange}) => {
+const TodoList = () => {
+    const [todos, setTodos] = useState([]);
+    const [totalPages, setTotalPages] = useState(0);
+    const [searchVal, setSearchVal] = useState("");
+    const handleSearchClick = () => {
+        fetchTodos(1, searchVal);
+    }
+    
+    const fetchTodos = async (page=1, search="") => {
+        const response = await fetch(`http://localhost:3000/api/v1/todos?page=${page}&title=${search}&description=${search}`);
+        const result = await response.json();
+        setTodos(result.items);
+        setTotalPages(result.totalPages);
+    }
+
+    const handlePageChange = (event, page) => {
+        fetchTodos(page, searchVal);
+    }
+
+    useEffect(() => {
+        fetchTodos()
+    }, [])
+
+    const onTodoDelete = async () => {
+        setSearchVal("");
+        await fetchTodos();
+    }
+    
     return (
         <>
             <Box sx={{ display:"flex", justifyContent:"space-between", alignItems:"center", my:2 }}>
@@ -22,13 +50,14 @@ const TodoList = ({todos, totalPages, handlePageChange}) => {
                 <FormControl variant="outlined">
                     <InputLabel htmlFor="search">Search</InputLabel>
                     <OutlinedInput
+                        onChange={(event) => {setSearchVal(event.target.value)}}
                         id="search"
                         type="text"
                         endAdornment={
                             <InputAdornment position="end">
                                 <IconButton
                                     aria-label="search"
-                                    //onClick={handleClickShowPassword}
+                                    onClick={handleSearchClick}
                                     edge="end"
                                 >
                                     <SearchIcon/>
@@ -46,6 +75,7 @@ const TodoList = ({todos, totalPages, handlePageChange}) => {
                         title={todo.title}
                         description={todo.description}
                         isCompleted={todo.isCompleted}
+                        onDelete={onTodoDelete}
                     />)
                 }
             </Stack>

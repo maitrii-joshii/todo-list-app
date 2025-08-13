@@ -1,12 +1,16 @@
 import React from "react";
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import Stack from '@mui/material/Stack';
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import {
+  Button,
+  TextField,
+  Container,
+  Typography,
+  Paper,
+  Stack
+} from "@mui/material";
+import { SnackbarProvider, useSnackbar } from "notistack";
+import { useNavigate } from "react-router";
 
 const validationSchema = Yup.object({
     title: Yup
@@ -21,14 +25,24 @@ const validationSchema = Yup.object({
 });
 
 const TodoForm = () => {
+    const { enqueueSnackbar } = useSnackbar();
+    const navigate = useNavigate();
     const formik = useFormik({
         initialValues: {
             title: '',
             description: '',
         },
         validationSchema: validationSchema,
-        onSubmit: (values) => {
-            alert(JSON.stringify(values, null, 2));
+        onSubmit: async (values) => {
+            await fetch("http://localhost:3000/api/v1/todos", {
+                method: "POST",
+                body: JSON.stringify(values),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            enqueueSnackbar('Todo created successfully', { variant:'success' });
+            navigate("/todos");
         },
     });
 

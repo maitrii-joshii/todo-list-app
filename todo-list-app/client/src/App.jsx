@@ -1,12 +1,13 @@
 import React from "react";
-import router from "./router";
 import { RouterProvider } from "react-router";
+import { SnackbarProvider } from "notistack";
+import router from "./router";
 
 const App = () => {
     return (
-        <>
-        <RouterProvider router={router}></RouterProvider>
-        </>
+        <SnackbarProvider>
+            <RouterProvider router={router}></RouterProvider>
+        </SnackbarProvider>
     )
 }
 
