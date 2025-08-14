@@ -9,6 +9,7 @@ import {
   Paper,
   Stack
 } from "@mui/material";
+import { useNavigate, useParams } from "react-router";
 
 const validationSchema = Yup.object({
     email: Yup
@@ -30,6 +31,7 @@ const validationSchema = Yup.object({
 });
 
 const Signup = () => {
+    const navigate = useNavigate();
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -38,8 +40,15 @@ const Signup = () => {
             lastName: ''
         },
         validationSchema: validationSchema,
-        onSubmit: (values) => {
-            alert(JSON.stringify(values, null, 2));
+        onSubmit: async (values) => {
+            await fetch("http://localhost:3000/api/v1/users/login", {
+                method: "POST",
+                body: JSON.stringify(values),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            navigate("/todos/new");
         },
     });
 
@@ -93,13 +102,14 @@ const Signup = () => {
                             id="password"
                             name="password"
                             label="Password"
+                            type="password"
                             value={formik.values.password}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             error={formik.touched.password && Boolean(formik.errors.password)}
                             helperText={formik.touched.password && formik.errors.password}
                         />
-                        <Button ccolor="primary" variant="contained" fullWidth type="submit">
+                        <Button color="primary" variant="contained" fullWidth type="submit">
                             Signup
                         </Button>
                     </Stack>

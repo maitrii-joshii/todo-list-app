@@ -8,17 +8,25 @@ import {
   InputAdornment,
   FormControl,
   IconButton,
-  Pagination
+  Pagination,
+  Button
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import { useNavigate } from "react-router";
 import TodoListItem from "./todoListItems";
 
 const TodoList = () => {
     const [todos, setTodos] = useState([]);
     const [totalPages, setTotalPages] = useState(0);
     const [searchVal, setSearchVal] = useState("");
+    const navigate = useNavigate();
+    
     const handleSearchClick = () => {
         fetchTodos(1, searchVal);
+    }
+
+    const handleCreateTodoClick = () => {
+        navigate("/todos/new");
     }
     
     const fetchTodos = async (page=1, search="") => {
@@ -67,6 +75,7 @@ const TodoList = () => {
                         label="Search"
                     />
                 </FormControl>
+                <Button color="primary" variant="contained" onClick={handleCreateTodoClick}>Create Todo</Button>
             </Box>
             <Stack spacing={2}>
                 {
