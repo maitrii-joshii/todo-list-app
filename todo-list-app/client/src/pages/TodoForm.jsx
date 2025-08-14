@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
@@ -10,7 +10,8 @@ import {
   Stack
 } from "@mui/material";
 import { SnackbarProvider, useSnackbar } from "notistack";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
+import Loader from "../components/common/loader";
 
 const validationSchema = Yup.object({
     title: Yup
@@ -25,8 +26,11 @@ const validationSchema = Yup.object({
 });
 
 const TodoForm = () => {
+    const [loading, setLoading] = useState(true);
     const { enqueueSnackbar } = useSnackbar();
     const navigate = useNavigate();
+    const { todoId } = useParams();
+
     const formik = useFormik({
         initialValues: {
             title: '',
@@ -34,58 +38,94 @@ const TodoForm = () => {
         },
         validationSchema: validationSchema,
         onSubmit: async (values) => {
-            await fetch("http://localhost:3000/api/v1/todos", {
-                method: "POST",
-                body: JSON.stringify(values),
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            });
-            enqueueSnackbar('Todo created successfully', { variant:'success' });
+            let successText = " ";
+            if(todoId == 'new') {
+                await fetch("http://localhost:3000/api/v1/todos", {
+                    method: "POST",
+                    body: JSON.stringify(values),
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                });
+                successText = "Todo created successfully";
+            }else {
+                await fetch(`http://localhost:3000/api/v1/todos/${todoId}`, {
+                    method: "PUT",
+                    body: JSON.stringify(values),
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                });
+                successText = "Todo updated successfully";
+            }
+            
+            enqueueSnackbar(successText, { variant:'success' });
             navigate("/todos");
         },
     });
+    const { setFieldValue } = formik;
+    
+    useEffect(() => {
+        const fetchTodo = async () => {
+            if(todoId !== 'new') {
+                const response = await fetch(`http://localhost:3000/api/v1/todos/${todoId}`)
+                const result = await response.json();
+                console.log(result);
+                const { title, description } = result.data;
+                setFieldValue('title', title);
+                setFieldValue('description', description);
+                setLoading(false);
+            }else {
+                setLoading(false);
+            }
+
+        }
+        fetchTodo();
+    }, [todoId]);
 
     return (
         <Container sx={{display:"flex", justifyContent:"center", alignItems:"center", my:"auto", height:"100%"}}>
-            <Paper sx={{width:'50%'}} elevation={5}>
-                <form onSubmit={formik.handleSubmit}>
-                    <Stack padding={7} spacing={5}>
-                        <Typography variant='h5'>
-                            Todo Task
-                        </Typography>
-                        <TextField
-                            fullWidth
-                            variant="outlined"
-                            id="title"
-                            name="title"
-                            label="Title"
-                            value={formik.values.title}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            error={formik.touched.title && Boolean(formik.errors.title)}
-                            helperText={formik.touched.title && formik.errors.title}
-                        />
-                        <TextField
-                            fullWidth
-                            multiline
-                            rows={5}
-                            variant="outlined"
-                            id="description"
-                            name="description"
-                            label="Description"
-                            value={formik.values.description}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            error={formik.touched.description && Boolean(formik.errors.description)}
-                            helperText={formik.touched.description && formik.errors.description}
-                        />
-                        <Button ccolor="primary" variant="contained" fullWidth type="submit">
-                            Submit
-                        </Button>
-                    </Stack>
-                </form>
-            </Paper>
+            {loading && <Loader/>}
+            {!loading &&
+                <Paper sx={{width:'50%'}} elevation={5}>
+                    <form onSubmit={formik.handleSubmit}>
+                        <Stack padding={7} spacing={5}>
+                            <Typography variant='h5'>
+                                Todo Task
+                            </Typography>
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                id="title"
+                                name="title"
+                                label="Title"
+                                value={formik.values.title}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                error={formik.touched.title && Boolean(formik.errors.title)}
+                                helperText={formik.touched.title && formik.errors.title}
+                            />
+                            <TextField
+                                fullWidth
+                                multiline
+                                rows={5}
+                                variant="outlined"
+                                id="description"
+                                name="description"
+                                label="Description"
+                                value={formik.values.description}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                error={formik.touched.description && Boolean(formik.errors.description)}
+                                helperText={formik.touched.description && formik.errors.description}
+                            />
+                            <Button ccolor="primary" variant="contained" fullWidth type="submit">
+                                Submit
+                            </Button>
+                        </Stack>
+                    </form>
+                </Paper>
+            }
         </Container>
     )
 }

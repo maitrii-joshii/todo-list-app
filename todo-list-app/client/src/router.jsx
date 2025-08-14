@@ -20,7 +20,7 @@ const router = createBrowserRouter([
         element: <Signup/>,
     },
     {
-        path: "/todo",
+        path: "/todos/:todoId",
         element: <TodoForm/>,
     },
     {
