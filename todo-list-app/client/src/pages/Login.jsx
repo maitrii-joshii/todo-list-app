@@ -10,6 +10,7 @@ import {
   Stack
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router";
+import { useAuth } from "../context/AuthContext";
 
 const validationSchema = Yup.object({
     email: Yup
@@ -24,6 +25,7 @@ const validationSchema = Yup.object({
 
 const Login = () => {
     const navigate = useNavigate();
+    const { login } = useAuth();
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -31,13 +33,16 @@ const Login = () => {
         },
         validationSchema: validationSchema,
         onSubmit: async (values) => {
-            await fetch("http://localhost:3000/api/v1/users/signup", {
+            const result = await fetch("http://localhost:3000/api/v1/users/login", {
                 method: "POST",
                 body: JSON.stringify(values),
                 headers: {
                     "Content-Type": "application/json"
                 }
             });
+            const response = await result.json();
+            const token = response.token;
+            login(token);
             navigate("/todos");
         },
     });
