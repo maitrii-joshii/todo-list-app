@@ -4,6 +4,7 @@ const cors = require("cors");
 const usersRouter = require('./routers/users');
 const todosRouter = require('./routers/todos');
 const auth = require('./middleware/auth');
+const db = require("./models");
 
 const app = express();
 
@@ -21,6 +22,8 @@ app.get('/', (req, res) => {
     res.send('Donezo Application');
 });
 
-app.listen(port, () => {
-    console.log(`Application is listening on port ${port}`);
-})
+db.sequelize.sync().then(() => {
+    app.listen(port, () => {
+        console.log(`Application is listening on port ${port}`);
+    });
+});

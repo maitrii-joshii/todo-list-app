@@ -1,4 +1,5 @@
 const todoService = require("../services/todos");
+const { Todo } = require('../models');
 
 const createTodo = async(req, res, next) => {
     try {
