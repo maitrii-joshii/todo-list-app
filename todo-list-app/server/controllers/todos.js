@@ -1,5 +1,6 @@
 const todoService = require("../services/todos");
 const { Todo } = require('../models');
+const { getUser } = require('../utils/context');
 
 const createTodo = async(req, res, next) => {
     try {
@@ -16,6 +17,7 @@ const createTodo = async(req, res, next) => {
 
 const getAllTodos = async(req, res, next) => {
     try {
+        const user = getUser();
         const limit = req.query.size || 10;
         const offset = ((req.query.page || 1) - 1) * limit;
         const title = req.query.title || '';
@@ -24,7 +26,7 @@ const getAllTodos = async(req, res, next) => {
         const size = limit;
         const todosCount = await todoService.getTodosCount(title, description);
         const totalPages = Math.ceil(todosCount / size);
-        const todos = await todoService.getAllTodos(offset, limit, title, description);
+        const todos = await todoService.getAllTodos(offset, limit, title, description, user.id);
         const response = {
             items: todos,
             page: currentPage,
@@ -41,7 +43,15 @@ const getAllTodos = async(req, res, next) => {
 
 const getTodo = async(req, res, next) => {
     try {
-        res.status(200).json({ data: await todoService.getTodo(req.params.todoId) });
+        const user = getUser();
+        const todo = await todoService.getTodo(req.params.todoId);
+        if (todo) {
+            if (todoService.isUserAuthorized(todo, user)) {
+                res.json({ data: todo }).status(200);
+            }
+            res.json().status(403);
+        }
+        res.json().status(404);
     }
     catch(error) {
         next(error);
@@ -50,11 +60,19 @@ const getTodo = async(req, res, next) => {
 
 const updateTodo = async(req, res, next) => {
     try {
+        const user = getUser();
         const {
             title,
             description
         } = req.body;
-        res.status(204).json({ data: await todoService.updateTodo(req.params.todoId, title, description) });
+        const todo = await todoService.getTodo(req.params.todoId);
+        if (todo) {
+            if (todoService.isUserAuthorized(todo, user)) {
+                res.json({ data: await todoService.updateTodo(req.params.todoId, title, description, user.id) }).status(204);
+            }
+            res.json().status(403);
+        }
+        res.json().status(404);
     }
     catch(error) {
         next(error);
@@ -72,7 +90,15 @@ const deleteTodo = async(req, res, next) => {
 
 const markTodoComplete = async(req, res, next) => {
     try {
-        res.status(200).json({ data: await todoService.updateTodoStatus(req.params.todoId, true) });
+        const user = getUser();
+        const todo = await todoService.getTodo(req.params.todoId);
+        if (todo) {
+            if (todoService.isUserAuthorized(todo, user)) {
+                res.json({ data: await todoService.updateTodoStatus(req.params.todoId, true) }).status(200);
+            }
+            res.json().status(403);
+        }
+        res.json().status(404);
     }
     catch(error) {
         next(error);
@@ -81,7 +107,15 @@ const markTodoComplete = async(req, res, next) => {
 
 const markTodoIncomplete = async(req, res, next) => {
     try {
-        res.status(200).json({ data: await todoService.updateTodoStatus(req.params.todoId, false) });
+        const user = getUser();
+        const todo = await todoService.getTodo(req.params.todoId);
+        if (todo) {
+            if (todoService.isUserAuthorized(todo, user)) {
+                res.json({ data: await todoService.updateTodoStatus(req.params.todoId, false) }).status(200);
+            }
+            res.json().status(403);
+        }
+        res.json().status(404);
     }
     catch(error) {
         next(error);
