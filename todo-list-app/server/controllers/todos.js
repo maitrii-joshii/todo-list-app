@@ -8,7 +8,7 @@ const createTodo = async(req, res, next) => {
             title,
             description
         } = req.body;
-        res.status(201).json({ data: await todoService.createTodo(title, description) });
+        return res.status(201).json({ data: await todoService.createTodo(title, description) });
     }
     catch(error) {
         next(error);
@@ -34,7 +34,7 @@ const getAllTodos = async(req, res, next) => {
             totalPages: totalPages,
             total: todosCount 
         }
-        res.status(200).json(response);
+        return res.status(200).json(response);
     }
     catch(error) {
         next(error);
@@ -47,11 +47,11 @@ const getTodo = async(req, res, next) => {
         const todo = await todoService.getTodo(req.params.todoId);
         if (todo) {
             if (todoService.isUserAuthorized(todo, user)) {
-                res.json({ data: todo }).status(200);
+                return res.status(200).json({ data: todo });
             }
-            res.json().status(403);
+            return res.status(403).json();
         }
-        res.json().status(404);
+        return res.status(404).json();
     }
     catch(error) {
         next(error);
@@ -68,11 +68,11 @@ const updateTodo = async(req, res, next) => {
         const todo = await todoService.getTodo(req.params.todoId);
         if (todo) {
             if (todoService.isUserAuthorized(todo, user)) {
-                res.json({ data: await todoService.updateTodo(req.params.todoId, title, description, user.id) }).status(204);
+                return res.status(204).json({ data: await todoService.updateTodo(req.params.todoId, title, description, user.id) });
             }
-            res.json().status(403);
+            return res.status(403).json();
         }
-        res.json().status(404);
+        return res.status(404).json();
     }
     catch(error) {
         next(error);
@@ -81,7 +81,7 @@ const updateTodo = async(req, res, next) => {
 
 const deleteTodo = async(req, res, next) => {
     try {
-        res.status(204).json({ data: await todoService.deleteTodo(req.params.todoId) });
+        return res.status(204).json({ data: await todoService.deleteTodo(req.params.todoId) });
     }
     catch(error) {
         next(error);
@@ -94,11 +94,11 @@ const markTodoComplete = async(req, res, next) => {
         const todo = await todoService.getTodo(req.params.todoId);
         if (todo) {
             if (todoService.isUserAuthorized(todo, user)) {
-                res.json({ data: await todoService.updateTodoStatus(req.params.todoId, true) }).status(200);
+                return res.status(200).json({ data: await todoService.updateTodoStatus(req.params.todoId, true) });
             }
-            res.json().status(403);
+            return res.status(403).json();
         }
-        res.json().status(404);
+        return res.status(404).json();
     }
     catch(error) {
         next(error);
@@ -111,11 +111,11 @@ const markTodoIncomplete = async(req, res, next) => {
         const todo = await todoService.getTodo(req.params.todoId);
         if (todo) {
             if (todoService.isUserAuthorized(todo, user)) {
-                res.json({ data: await todoService.updateTodoStatus(req.params.todoId, false) }).status(200);
+                return res.status(200).json({ data: await todoService.updateTodoStatus(req.params.todoId, false) });
             }
-            res.json().status(403);
+            return res.status(403).json();
         }
-        res.json().status(404);
+        return res.status(404).json();
     }
     catch(error) {
         next(error);
