@@ -12,13 +12,14 @@ import { useSnackbar } from "notistack";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router";
+import apiRequest from "../../utils/apiClient";
 
 const TodoListItem = ({id, title, description, isCompleted, onDelete}) => {
     const { enqueueSnackbar } = useSnackbar();
     const navigate = useNavigate();
 
     const handleDeleteClick = async () => {
-        await fetch(`http://localhost:3000/api/v1/todos/${id}`, {
+        await apiRequest(`/todos/${id}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json"

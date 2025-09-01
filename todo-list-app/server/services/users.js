@@ -6,14 +6,18 @@ const { JWT_SECRET } = process.env;
 
 const authenticate = async (email, password) => {
     const user = await User.findOne({ where: { email: email } });
-    const isPasswordValid = await bcrypt.compare(password, user.password);
 
-    if(isPasswordValid) {
-        const token = jwt.sign({ id: user.id }, JWT_SECRET, {
-            expiresIn: 24 * 60 * 60, 
-        });
-        return { token };
+    if (user) {
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+
+        if(isPasswordValid) {
+            const token = jwt.sign({ id: user.id }, JWT_SECRET, {
+                expiresIn: 24 * 60 * 60, 
+            });
+            return token;
+        }
     }
+    return null;
     
 };
 

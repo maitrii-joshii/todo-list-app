@@ -9,9 +9,10 @@ import {
   Paper,
   Stack
 } from "@mui/material";
-import { SnackbarProvider, useSnackbar } from "notistack";
+import { useSnackbar } from "notistack";
 import { useNavigate, useParams } from "react-router";
 import Loader from "../components/common/loader";
+import apiRequest from "../utils/apiClient";
 
 const validationSchema = Yup.object({
     title: Yup
@@ -40,7 +41,7 @@ const TodoForm = () => {
         onSubmit: async (values) => {
             let successText = " ";
             if(todoId == 'new') {
-                await fetch("http://localhost:3000/api/v1/todos", {
+                await apiRequest("/todos", {
                     method: "POST",
                     body: JSON.stringify(values),
                     headers: {
@@ -49,7 +50,7 @@ const TodoForm = () => {
                 });
                 successText = "Todo created successfully";
             }else {
-                await fetch(`http://localhost:3000/api/v1/todos/${todoId}`, {
+                await apiRequest(`/todos/${todoId}`, {
                     method: "PUT",
                     body: JSON.stringify(values),
                     headers: {
@@ -68,7 +69,7 @@ const TodoForm = () => {
     useEffect(() => {
         const fetchTodo = async () => {
             if(todoId !== 'new') {
-                const response = await fetch(`http://localhost:3000/api/v1/todos/${todoId}`)
+                const response = await apiRequest(`/todos/${todoId}`)
                 const result = await response.json();
                 console.log(result);
                 const { title, description } = result.data;

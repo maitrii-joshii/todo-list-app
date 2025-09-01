@@ -37,9 +37,13 @@ const initialize = () => {
 const authenticate = () => {
   return (req, res, next) => {
     passport.authenticate("jwt", { session: false }, (err, user, info, status) => {
-      if (user) {
-        createRequestContext(user, () => next());
+      if (err) {
+        return next(err);
       }
+      if (!user) {
+        return res.status(401).json({ message: "Unauthorized: Token missing or invalid" });
+      }
+      createRequestContext(user, () => next());
     })(req, res, next);
   }
 };

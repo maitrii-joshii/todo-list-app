@@ -14,6 +14,7 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router";
 import TodoListItem from "./todoListItems";
+import apiRequest from "../../utils/apiClient";
 
 const TodoList = () => {
     const [todos, setTodos] = useState([]);
@@ -30,7 +31,7 @@ const TodoList = () => {
     }
     
     const fetchTodos = async (page=1, search="") => {
-        const response = await fetch(`http://localhost:3000/api/v1/todos?page=${page}&title=${search}&description=${search}`);
+        const response = await apiRequest(`/todos?page=${page}&title=${search}&description=${search}`);
         const result = await response.json();
         setTodos(result.items);
         setTotalPages(result.totalPages);

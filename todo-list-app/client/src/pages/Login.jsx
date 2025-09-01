@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router";
 import { useAuth } from "../context/AuthContext";
+import apiRequest from "../utils/apiClient";
 
 const validationSchema = Yup.object({
     email: Yup
@@ -33,7 +34,7 @@ const Login = () => {
         },
         validationSchema: validationSchema,
         onSubmit: async (values) => {
-            const result = await fetch("http://localhost:3000/api/v1/users/login", {
+            const result = await apiRequest("/users/login", {
                 method: "POST",
                 body: JSON.stringify(values),
                 headers: {

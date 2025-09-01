@@ -10,6 +10,7 @@ import {
   Stack
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router";
+import apiRequest from "../utils/apiClient";
 
 const validationSchema = Yup.object({
     email: Yup
@@ -41,7 +42,7 @@ const Signup = () => {
         },
         validationSchema: validationSchema,
         onSubmit: async (values) => {
-            await fetch("http://localhost:3000/api/v1/users/login", {
+            await apiRequest("/users/signup", {
                 method: "POST",
                 body: JSON.stringify(values),
                 headers: {
