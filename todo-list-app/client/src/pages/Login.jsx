@@ -41,10 +41,11 @@ const Login = () => {
                     "Content-Type": "application/json"
                 }
             });
-            const response = await result.json();
-            const token = response.token;
-            login(token);
-            navigate("/todos");
+            if (!(result.error)) {
+                const token = result.token;
+                login(token);
+                navigate("/todos");
+            }
         },
     });
 

@@ -40,8 +40,9 @@ const TodoForm = () => {
         validationSchema: validationSchema,
         onSubmit: async (values) => {
             let successText = " ";
+            let result;
             if(todoId == 'new') {
-                await apiRequest("/todos", {
+                result = await apiRequest("/todos", {
                     method: "POST",
                     body: JSON.stringify(values),
                     headers: {
@@ -50,7 +51,7 @@ const TodoForm = () => {
                 });
                 successText = "Todo created successfully";
             }else {
-                await apiRequest(`/todos/${todoId}`, {
+                result = await apiRequest(`/todos/${todoId}`, {
                     method: "PUT",
                     body: JSON.stringify(values),
                     headers: {
@@ -60,8 +61,10 @@ const TodoForm = () => {
                 successText = "Todo updated successfully";
             }
             
-            enqueueSnackbar(successText, { variant:'success' });
-            navigate("/todos");
+            if (!(result.error)) {
+                enqueueSnackbar(successText, { variant:'success' });
+                navigate("/todos");
+            }
         },
     });
     const { setFieldValue } = formik;
@@ -70,9 +73,7 @@ const TodoForm = () => {
         const fetchTodo = async () => {
             if(todoId !== 'new') {
                 const response = await apiRequest(`/todos/${todoId}`)
-                const result = await response.json();
-                console.log(result);
-                const { title, description } = result.data;
+                const { title, description } = response.data;
                 setFieldValue('title', title);
                 setFieldValue('description', description);
                 setLoading(false);

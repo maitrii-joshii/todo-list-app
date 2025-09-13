@@ -32,9 +32,10 @@ const TodoList = () => {
     
     const fetchTodos = async (page=1, search="") => {
         const response = await apiRequest(`/todos?page=${page}&title=${search}&description=${search}`);
-        const result = await response.json();
-        setTodos(result.items);
-        setTotalPages(result.totalPages);
+        if (!(response.error)) {
+            setTodos(response.items);
+            setTotalPages(response.totalPages);
+        }
     }
 
     const handlePageChange = (event, page) => {

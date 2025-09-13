@@ -42,14 +42,16 @@ const Signup = () => {
         },
         validationSchema: validationSchema,
         onSubmit: async (values) => {
-            await apiRequest("/users/signup", {
+            const result = await apiRequest("/users/signup", {
                 method: "POST",
                 body: JSON.stringify(values),
                 headers: {
                     "Content-Type": "application/json"
                 }
             });
-            navigate("/todos/new");
+            if (!(result.error)) {
+                navigate("/login");
+            }
         },
     });
 
