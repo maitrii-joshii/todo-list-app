@@ -1,5 +1,6 @@
 import React from "react";
 import { createBrowserRouter } from "react-router";
+import Layout from "./components/layout/Layout";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -22,14 +23,19 @@ const router = createBrowserRouter([
     },
     {
         element: <ProtectedRoute />,
-        children:[
+        children: [
             {
-                path: "/todos/:todoId",
-                element: <TodoForm/>,
-            },
-            {
-                path: "/todos",
-                element: <Todos/>,
+                element: <Layout />,
+                children:[
+                    {
+                        path: "/todos/:todoId",
+                        element: <TodoForm/>,
+                    },
+                    {
+                        path: "/todos",
+                        element: <Todos/>,
+                    }
+                ]
             }
         ]
     }
