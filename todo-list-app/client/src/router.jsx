@@ -7,6 +7,7 @@ import Signup from "./pages/Signup";
 import TodoForm from "./pages/TodoForm";
 import Todos from "./pages/Todos";
 import ProtectedRoute from "./components/common/ProtectedRoutes";
+import PublicRoute from "./components/common/PublicRoutes";
 
 const router = createBrowserRouter([
     {
@@ -14,12 +15,17 @@ const router = createBrowserRouter([
         element: <Home/>,
     },
     {
-        path: "/login",
-        element: <Login/>,
-    },
-    {
-        path: "/signup",
-        element: <Signup/>,
+        element: <PublicRoute />,
+        children: [
+            {
+                path: "/login",
+                element: <Login/>,
+            },
+            {
+                path: "/signup",
+                element: <Signup/>,
+            }
+        ]
     },
     {
         element: <ProtectedRoute />,

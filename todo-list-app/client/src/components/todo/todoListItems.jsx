@@ -13,8 +13,9 @@ import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router";
 import apiRequest from "../../utils/apiClient";
+import { formatDateTime } from "../../utils/dateUtils";
 
-const TodoListItem = ({id, title, description, isCompleted, onDelete}) => {
+const TodoListItem = ({id, title, description, createdAt, isCompleted, onDelete}) => {
     const { enqueueSnackbar } = useSnackbar();
     const navigate = useNavigate();
 
@@ -41,8 +42,8 @@ const TodoListItem = ({id, title, description, isCompleted, onDelete}) => {
                 <Box sx={{width:'5%'}}><Checkbox/></Box>
                 <Box sx={{width:'20%', display:"flex", justifyContent:"start", alignItems:"center"}}>{title}</Box>
                 <Box sx={{width:'50%', display:"flex", justifyContent:"start", alignItems:"center"}}>{description}</Box>
-                <Box sx={{width:'10%', display:"flex", justifyContent:"start", alignItems:"center"}}>2025-08-01</Box>
-                <Box sx={{width:'15%', display:"flex", justifyContent:"center", alignItems:"center"}}>
+                <Box sx={{width:'15%', display:"flex", justifyContent:"start", alignItems:"center"}}>{formatDateTime(createdAt)}</Box>
+                <Box sx={{width:'10%', display:"flex", justifyContent:"center", alignItems:"center"}}>
                     <Stack direction="row" divider={<Divider orientation="vertical" flexItem />} spacing={2}>
                         <IconButton onClick={handleEditClick}>
                             <EditIcon/>

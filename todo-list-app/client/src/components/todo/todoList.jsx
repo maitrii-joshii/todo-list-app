@@ -85,6 +85,7 @@ const TodoList = () => {
                         id={todo.id}
                         title={todo.title}
                         description={todo.description}
+                        createdAt={todo.createdAt}
                         isCompleted={todo.isCompleted}
                         onDelete={onTodoDelete}
                     />)
