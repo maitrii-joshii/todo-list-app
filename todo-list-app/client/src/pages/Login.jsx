@@ -36,10 +36,7 @@ const Login = () => {
         onSubmit: async (values) => {
             const result = await apiRequest("/users/login", {
                 method: "POST",
-                body: JSON.stringify(values),
-                headers: {
-                    "Content-Type": "application/json"
-                }
+                body: values,
             });
             if (!(result.error)) {
                 const token = result.token;

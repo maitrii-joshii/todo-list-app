@@ -44,19 +44,13 @@ const TodoForm = () => {
             if(todoId == 'new') {
                 result = await apiRequest("/todos", {
                     method: "POST",
-                    body: JSON.stringify(values),
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
+                    body: values,
                 });
                 successText = "Todo created successfully";
             }else {
                 result = await apiRequest(`/todos/${todoId}`, {
                     method: "PUT",
-                    body: JSON.stringify(values),
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
+                    body: values,
                 });
                 successText = "Todo updated successfully";
             }

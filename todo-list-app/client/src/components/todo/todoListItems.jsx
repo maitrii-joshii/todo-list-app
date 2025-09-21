@@ -18,6 +18,7 @@ import { formatDateTime } from "../../utils/dateUtils";
 const TodoListItem = ({id, title, description, createdAt, isCompleted, onDelete}) => {
     const { enqueueSnackbar } = useSnackbar();
     const navigate = useNavigate();
+    const [isTodoCompleted, setIsTodoCompleted] = useState(isCompleted);
 
     const handleDeleteClick = async () => {
         await apiRequest(`/todos/${id}`, {
@@ -36,10 +37,32 @@ const TodoListItem = ({id, title, description, createdAt, isCompleted, onDelete}
         navigate(`${id}`);
     }
 
+    const handleChange = async () => {
+        if (!isTodoCompleted) {
+            await apiRequest(`/todos/${id}/complete`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            enqueueSnackbar('Todo completed successfully', { variant:'success' });
+            setIsTodoCompleted(true);
+        } else {
+            await apiRequest(`/todos/${id}/incomplete`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            enqueueSnackbar('Todo incompleted successfully', { variant:'success' });
+            setIsTodoCompleted(false);
+        }
+    }
+
     return (
         <Box sx={{ p: 2, border: '1px solid black', borderRadius: 2, width: '100%' }}>
             <Stack direction={"row"} spacing={2}>
-                <Box sx={{width:'5%'}}><Checkbox/></Box>
+                <Box sx={{width:'5%'}}><Checkbox checked={isTodoCompleted} onChange={handleChange} slotProps={{ 'aria-label': 'controlled' }} /></Box>
                 <Box sx={{width:'20%', display:"flex", justifyContent:"start", alignItems:"center"}}>{title}</Box>
                 <Box sx={{width:'50%', display:"flex", justifyContent:"start", alignItems:"center"}}>{description}</Box>
                 <Box sx={{width:'15%', display:"flex", justifyContent:"start", alignItems:"center"}}>{formatDateTime(createdAt)}</Box>
