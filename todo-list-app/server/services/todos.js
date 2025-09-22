@@ -35,7 +35,7 @@ const getTodo = async(todoId) => {
     return todo;
 };
 
-const getTodosCount = async(title, description) => {
+const getTodosCount = async(title, description, userId) => {
     const whereClause = [];
     if (title || !(title || description)){
         whereClause.push({ title: {[Op.iLike]: `%${title}%`} });
@@ -45,7 +45,10 @@ const getTodosCount = async(title, description) => {
     }
     const todosCount = await Todo.count({
         where: {
+            [Op.and]: {
+                createdBy: userId, 
                 [Op.or]: whereClause,
+            }
         },
     });
     return todosCount;

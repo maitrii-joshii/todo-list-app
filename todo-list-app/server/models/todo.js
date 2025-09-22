@@ -30,6 +30,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Todo',
+    paranoid: true,
     hooks: {
       beforeCreate: (todo, options) => {
         const user = getUser();

@@ -24,7 +24,7 @@ const getAllTodos = async(req, res, next) => {
         const description = req.query.description || '';
         const currentPage = req.query.page || 1;
         const size = limit;
-        const todosCount = await todoService.getTodosCount(title, description);
+        const todosCount = await todoService.getTodosCount(title, description, user.id);
         const totalPages = Math.ceil(todosCount / size);
         const todos = await todoService.getAllTodos(offset, limit, title, description, user.id);
         const response = {
