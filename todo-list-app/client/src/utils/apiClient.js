@@ -25,7 +25,7 @@ const apiRequest = async(endpoint, options = {}) => {
                 localStorage.removeItem("token");
             }
 
-            return { error: true, message: errorMessage };
+            return { error: true, message: errorMessage, data: {} };
         }
 
         if (response.status === 204) {

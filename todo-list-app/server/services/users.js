@@ -12,7 +12,7 @@ const authenticate = async (email, password) => {
 
         if(isPasswordValid) {
             const token = jwt.sign({ id: user.id }, JWT_SECRET, {
-                expiresIn: 24 * 60 * 60, 
+                expiresIn: 60 * 60, 
             });
             return token;
         }

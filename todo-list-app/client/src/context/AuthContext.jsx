@@ -17,6 +17,28 @@ export const AuthProvider = ({ children }) => {
         setisAuthenticated(false);
     };
 
+    useEffect(() => {
+        const handleStorageChange = (e) => {
+            if (e.key === "token") {
+                setisAuthenticated(!!e.newValue);
+            }
+        }
+
+        window.addEventListener("storage", handleStorageChange);
+        return () => {
+            window.removeEventListener("storage", handleStorageChange);
+        }
+    }, []);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            const token = localStorage.getItem("token");
+            if (!token) setisAuthenticated(false);
+        }, 5000);
+
+        return () => clearInterval(interval);
+    }, []);
+
     return (
         <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
             {children}
