@@ -11,12 +11,12 @@ const signUp = async(req, res, next) => {
         const user = await findUser(email);
 
         if(user) {
-            res.status(409).json({ message: "Email already exists!" });
+            return res.status(409).json({ message: "Email already exists!" });
         }
 
         const { token } = await createUser(email, firstName, lastName, password);
         
-        res.status(201).json({ message: "User is created" });
+        return res.status(201).json({ message: "User is created" });
     }
     catch(error) {
         next(error);
@@ -29,15 +29,13 @@ const signIn = async(req, res, next) => {
             email,
             password
         } = req.body;
-        const user = await findUser(email);
 
-        if(!user) {
-            res.status(409).json({ message: "Email doesn't exists!" });
+        const token = await authenticate(email, password);
+
+        if (token) {
+            return res.status(200).json({ token });
         }
-
-        const { token } = await authenticate(email, password);
-        
-        res.status(200).json({ token });
+        return res.status(401).json({ message: 'Email or password invalid' });
     }
     catch(error) {
         next(error);

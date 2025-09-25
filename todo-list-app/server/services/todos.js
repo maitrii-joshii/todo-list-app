@@ -6,7 +6,7 @@ const createTodo = async(title, description, isCompleted) => {
     return todo;
 };
 
-const getAllTodos = async(offset, limit, title, description) => {
+const getAllTodos = async(offset, limit, title, description, userId) => {
     const whereClause = [];
     if (title || !(title || description)){
         whereClause.push({ title: {[Op.iLike]: `%${title}%`} });
@@ -19,7 +19,10 @@ const getAllTodos = async(offset, limit, title, description) => {
             offset: offset, 
             limit: limit,
             where: {
-                [Op.or]: whereClause,
+                [Op.and]: {
+                    createdBy: userId, 
+                    [Op.or]: whereClause,
+                }
             },
             order: [['createdAt', 'DESC']]
         }
@@ -32,8 +35,22 @@ const getTodo = async(todoId) => {
     return todo;
 };
 
-const getTodosCount = async() => {
-    const todosCount = await Todo.count();
+const getTodosCount = async(title, description, userId) => {
+    const whereClause = [];
+    if (title || !(title || description)){
+        whereClause.push({ title: {[Op.iLike]: `%${title}%`} });
+    }
+    if (description){
+        whereClause.push({ description: {[Op.iLike]: `%${description}%`} });
+    }
+    const todosCount = await Todo.count({
+        where: {
+            [Op.and]: {
+                createdBy: userId, 
+                [Op.or]: whereClause,
+            }
+        },
+    });
     return todosCount;
 };
 
@@ -57,4 +74,8 @@ const deleteTodo = async(todoId) => {
     return true;
 };
 
-module.exports = {createTodo, getAllTodos, getTodo, getTodosCount, updateTodo, deleteTodo, updateTodoStatus};
+const isUserAuthorized = (todo, user) => {
+    return todo.createdBy === user.id;
+};
+
+module.exports = {createTodo, getAllTodos, getTodo, getTodosCount, updateTodo, deleteTodo, updateTodoStatus, isUserAuthorized};

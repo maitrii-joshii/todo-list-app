@@ -1,8 +1,10 @@
 'use strict';
 
-const {
-  Model
-} = require('sequelize');
+const { DataTypes, Model } = require('sequelize');
+const { getUser } = require('../utils/context');
+const { use } = require('passport');
+
+
 module.exports = (sequelize, DataTypes) => {
   class Todo extends Model {
     /**
@@ -28,6 +30,27 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Todo',
+    paranoid: true,
+    hooks: {
+      beforeCreate: (todo, options) => {
+        const user = getUser();
+        if (user) {
+          todo.createdBy = user.id;
+        }
+      },
+      beforeUpdate: (todo, options) => {
+        const user = getUser();
+        if (user) {
+          todo.updatedBy = user.id;
+        }
+      },
+      beforeDestroy: (todo, options) => {
+        const user = getUser();
+        if (user) {
+          todo.deletedBy = user.id;
+        }
+      },
+    }
   });
   return Todo;
 };

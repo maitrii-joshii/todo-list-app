@@ -1,6 +1,8 @@
 const passport = require("passport");
 const { Strategy, ExtractJwt } = require("passport-jwt");
+const jwt = require("jsonwebtoken");
 const { findUserById } = require("../services/users");
+const { createRequestContext } = require("../utils/context");
 
 const { JWT_SECRET } = process.env;
 
@@ -33,10 +35,20 @@ const initialize = () => {
 };
 
 const authenticate = () => {
-  return passport.authenticate("jwt", { session: false });
+  return (req, res, next) => {
+    passport.authenticate("jwt", { session: false }, (err, user, info, status) => {
+      if (err) {
+        return next(err);
+      }
+      if (!user) {
+        return res.status(401).json({ message: "Unauthorized: Token missing or invalid" });
+      }
+      createRequestContext(user, () => next());
+    })(req, res, next);
+  }
 };
 
 module.exports = {
   initialize,
-  authenticate,
+  authenticate
 };
