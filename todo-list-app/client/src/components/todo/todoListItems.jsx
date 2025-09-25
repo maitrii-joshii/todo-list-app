@@ -21,15 +21,17 @@ const TodoListItem = ({id, title, description, createdAt, isCompleted, onDelete}
     const [isTodoCompleted, setIsTodoCompleted] = useState(isCompleted);
 
     const handleDeleteClick = async () => {
-        await apiRequest(`/todos/${id}`, {
+        const response = await apiRequest(`/todos/${id}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json"
             }
         });
-        enqueueSnackbar('Todo deleted successfully', { variant:'success' });
-        if (onDelete) {
-            onDelete();
+        if (!response.error) {
+            enqueueSnackbar('Todo deleted successfully', { variant:'success' });
+            if (onDelete) {
+                onDelete();
+            }
         }
     }
 
@@ -39,23 +41,27 @@ const TodoListItem = ({id, title, description, createdAt, isCompleted, onDelete}
 
     const handleChange = async () => {
         if (!isTodoCompleted) {
-            await apiRequest(`/todos/${id}/complete`, {
+            const response = await apiRequest(`/todos/${id}/complete`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
                 }
             });
-            enqueueSnackbar('Todo completed successfully', { variant:'success' });
-            setIsTodoCompleted(true);
+            if (!response.error) {
+                enqueueSnackbar('Todo completed successfully', { variant:'success' });
+                setIsTodoCompleted(true);
+            }
         } else {
-            await apiRequest(`/todos/${id}/incomplete`, {
+            const response = await apiRequest(`/todos/${id}/incomplete`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
                 }
             });
-            enqueueSnackbar('Todo incompleted successfully', { variant:'success' });
-            setIsTodoCompleted(false);
+            if (!response.error) {
+                enqueueSnackbar('Todo incompleted successfully', { variant:'success' });
+                setIsTodoCompleted(false);
+            }
         }
     }
 
