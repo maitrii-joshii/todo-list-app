@@ -4,6 +4,7 @@ import Layout from "./components/layout/Layout";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import NotFoundPage from "./pages/NotFoundPage";
 import TodoForm from "./pages/TodoForm";
 import Todos from "./pages/Todos";
 import ProtectedRoute from "./components/common/ProtectedRoutes";
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
                 ]
             }
         ]
+    },
+    {
+        path: "*",
+        element: <NotFoundPage/>,
     }
 ])
 

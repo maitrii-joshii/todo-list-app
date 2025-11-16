@@ -44,7 +44,7 @@ const Signup = () => {
         onSubmit: async (values) => {
             const result = await apiRequest("/users/signup", {
                 method: "POST",
-                body: JSON.stringify(values),
+                body: values,
                 headers: {
                     "Content-Type": "application/json"
                 }
@@ -56,7 +56,7 @@ const Signup = () => {
     });
 
     return (
-        <Container sx={{display:"flex", justifyContent:"center", alignItems:"center", my:"auto", height:"100%"}}>
+        <Container sx={{display:"flex", justifyContent:"center", alignItems:"center", my:"auto", height:"100%", mt:2}}>
             <Paper sx={{width:'50%'}} elevation={5}>
                 <form onSubmit={formik.handleSubmit}>
                     <Stack padding={7} spacing={5}>

@@ -21,7 +21,7 @@ const Layout = () => {
     return (
         <>
             <header>
-                <Box sx={{ display:"flex", justifyContent:"space-between", alignItems:"center", py:2, borderBottom: 1, boxShadow: 1, px: 2, borderColor: 'grey.500' }}>
+                <Box sx={{ display:"flex", justifyContent:"space-between", alignItems:"center", py:2, borderBottom: 1, boxShadow: 1, px: 2, borderColor: 'grey.500', mb: 2 }}>
                     <Typography variant='h3'>
                         Donezo
                     </Typography>

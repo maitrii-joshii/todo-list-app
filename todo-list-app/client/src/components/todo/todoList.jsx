@@ -23,7 +23,7 @@ const TodoList = () => {
     const navigate = useNavigate();
     
     const handleSearchClick = () => {
-        fetchTodos(1, searchVal);
+        fetchTodos(1, searchVal.trim());
     }
 
     const handleCreateTodoClick = () => {
